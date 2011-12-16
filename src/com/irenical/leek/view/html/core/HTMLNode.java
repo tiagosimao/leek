@@ -1,3 +1,19 @@
+/*
+	This file is part of Leek.
+
+    Leek is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Leek is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Leek.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.irenical.leek.view.html.core;
 
 import java.util.Collections;
@@ -11,13 +27,11 @@ import com.irenical.leek.model.ModelTransformer;
 import com.irenical.leek.view.ViewConfig;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLNode<MODEL_CLASS> extends StringView<MODEL_CLASS> implements HTMLConstants {
+public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
 	
-	private final Map<StringView<?>,ModelTransformer<MODEL_CLASS,?>> transformers = Collections.synchronizedMap(new HashMap<StringView<?>, ModelTransformer<MODEL_CLASS, ?>>());
+	private final Map<StringView<?,?>,ModelTransformer<MODEL_CLASS,?>> transformers = Collections.synchronizedMap(new HashMap<StringView<?,?>, ModelTransformer<MODEL_CLASS, ?>>());
 	
-	private final Map<StringView<?>,ViewConfig<?>> configs = Collections.synchronizedMap(new HashMap<StringView<?>, ViewConfig<?>>());
-	
-	private final List<StringView<?>> children = Collections.synchronizedList(new LinkedList<StringView<?>>());
+	private final List<StringView<?,?>> children = Collections.synchronizedList(new LinkedList<StringView<?,?>>());
 	
 	private final HTMLAttributes<MODEL_CLASS> attributes = new HTMLAttributes<MODEL_CLASS>();
 	
@@ -25,7 +39,7 @@ public class HTMLNode<MODEL_CLASS> extends StringView<MODEL_CLASS> implements HT
 	
 	private boolean commented = false;
 	
-	public HTMLNode(HTMLTag tag, ViewConfig<MODEL_CLASS> config) {
+	public HTMLNode(HTMLTag tag, CONFIG_CLASS config) {
 		super(config);
 		this.tag=tag;
 	}
@@ -39,45 +53,52 @@ public class HTMLNode<MODEL_CLASS> extends StringView<MODEL_CLASS> implements HT
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <CHILD_MODEL_CLASS> HTMLTextNode<CHILD_MODEL_CLASS> addTextNode(){
-		return (HTMLTextNode<CHILD_MODEL_CLASS>)createNode(null,null,null);
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addTextNode(){
+		return (HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(null,null,null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <CHILD_MODEL_CLASS> HTMLTextNode<CHILD_MODEL_CLASS> addTextNode(Class<CHILD_MODEL_CLASS> modelClass){
-		return (HTMLTextNode<CHILD_MODEL_CLASS>)createNode(null,null,null);
-	}
-	
-	public <CHILD_MODEL_CLASS> HTMLTextNode<CHILD_MODEL_CLASS> addTextNode(ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer){
-		return (HTMLTextNode<CHILD_MODEL_CLASS>) createNode(null,transformer,null);
-	}
-	
-	public <CHILD_MODEL_CLASS> HTMLTextNode<CHILD_MODEL_CLASS> addTextNode(ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,ViewConfig<CHILD_MODEL_CLASS> config){
-		return (HTMLTextNode<CHILD_MODEL_CLASS>) createNode(null,transformer,config);
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addTextNode(Class<CHILD_MODEL_CLASS> modelClass){
+		return (HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(null,null,null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <CHILD_MODEL_CLASS> HTMLNode<CHILD_MODEL_CLASS> addNode(HTMLTag tag){
-		return (HTMLNode<CHILD_MODEL_CLASS>) createNode(tag,null,null);
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addTextNode(ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer){
+		return (HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(null,transformer,null);
 	}
 	
-	public <CHILD_MODEL_CLASS> HTMLNode<CHILD_MODEL_CLASS> addNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer){
-		return (HTMLNode<CHILD_MODEL_CLASS>) createNode(tag,transformer,null);
+	@SuppressWarnings("unchecked")
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addTextNode(ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,ViewConfig<CHILD_MODEL_CLASS> config){
+		return (HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(null,transformer,config);
 	}
 	
-	public <CHILD_MODEL_CLASS> HTMLNode<CHILD_MODEL_CLASS> addNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,ViewConfig<CHILD_MODEL_CLASS> config){
-		return (HTMLNode<CHILD_MODEL_CLASS>) createNode(tag,transformer,config);
+	@SuppressWarnings("unchecked")
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addNode(HTMLTag tag){
+		return (HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(tag,null,null);
 	}
 	
-	private <CHILD_MODEL_CLASS> StringView<CHILD_MODEL_CLASS> createNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,ViewConfig<CHILD_MODEL_CLASS> config){
-		StringView<CHILD_MODEL_CLASS> child = null;
+	@SuppressWarnings("unchecked")
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer){
+		return (HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(tag,transformer,null);
+	}
+	
+	public <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> addNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,CHILD_CONFIG_CLASS config){
+		return (HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>) createNode(tag,transformer,config);
+	}
+	
+	public <CHILD_MODEL_CLASS> void addNode(HTMLNode<CHILD_MODEL_CLASS,?> child,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer){
+		transformers.put(child, transformer);
+		children.add(child);
+	}
+	
+	private <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> StringView<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> createNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,CHILD_CONFIG_CLASS config){
+		StringView<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> child = null;
 		if(tag==null){
-			child = new HTMLTextNode<CHILD_MODEL_CLASS>(config);
+			child = new HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>(config);
 		} else {
-			child = new HTMLNode<CHILD_MODEL_CLASS>(tag,config);
+			child = new HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>(tag,(config));
 		}
 		transformers.put(child, transformer);
-		configs.put(child, config);
 		children.add(child);
 		return child;
 	}
@@ -85,7 +106,7 @@ public class HTMLNode<MODEL_CLASS> extends StringView<MODEL_CLASS> implements HT
 	@SuppressWarnings({"unchecked","rawtypes"})
 	@Override
 	protected void buildString(StringBuilder builder,MODEL_CLASS model) {
-		if(config==null||config.isShowing(model)){
+		if(getConfig()==null||getConfig().isShowing(model)){
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
 			tag.htmlOpen(builder, model, attributes, selfClosing, commented);
 			for(StringView child : children){
@@ -111,8 +132,8 @@ public class HTMLNode<MODEL_CLASS> extends StringView<MODEL_CLASS> implements HT
 		}
 	}
 	
-	public static <MODEL_CLASS> HTMLNode<MODEL_CLASS> createNode(HTMLTag tag, ViewConfig<MODEL_CLASS> config){
-		return new HTMLNode<MODEL_CLASS>(tag,config);
-	}
+//	public static <MODEL_CLASS> HTMLNode<MODEL_CLASS> createNode(HTMLTag tag, ViewConfig<MODEL_CLASS> config){
+//		return new HTMLNode<MODEL_CLASS>(tag,config);
+//	}
 	
 }
