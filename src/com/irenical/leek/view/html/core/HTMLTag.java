@@ -17,6 +17,8 @@
 package com.irenical.leek.view.html.core;
 
 import com.irenical.leek.view.ViewConfigInterface;
+import com.irenical.leek.view.html.core.HTMLAttributes;
+import com.irenical.leek.view.html.core.HTMLConstants;
 
 
 
