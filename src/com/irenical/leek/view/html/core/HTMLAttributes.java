@@ -43,11 +43,11 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 		setAttribute(key, value, append);
 	}
 	
-	public void setMutableAttribute(String key,ModelTransformer<MODEL_CLASS,String> transformer){
+	public void setMutableAttribute(String key,ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS> transformer){
 		setAttribute(key, transformer, false);
 	}
 	
-	public void setMutableAttribute(String key,ModelTransformer<MODEL_CLASS,String> transformer,boolean append){
+	public void setMutableAttribute(String key,ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS> transformer,boolean append){
 		setAttribute(key, transformer, append);
 	}
 	
@@ -80,21 +80,21 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 				builder.append(key);
 				builder.append(SYMBOL_EQUALS);
 				builder.append(SYMBOL_QUOTES);
-				buildValueString(builder,values,model);
+				buildValueString(builder,values,model,config);
 				builder.append(SYMBOL_QUOTES);
 			}
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void buildValueString(StringBuilder builder,Object value,MODEL_CLASS model){
+	private void buildValueString(StringBuilder builder,Object value,MODEL_CLASS model,CONFIG_CLASS config){
 		if(value instanceof Collection<?>){
 			for(Object v : ((Collection<?>)value)){
-				buildValueString(builder,v,model);
+				buildValueString(builder,v,model,config);
 				builder.append(SYMBOL_WHITESPACE);
 			}
-		} else if(value instanceof ModelTransformer<?,?>) {
-			String stringValue = ((ModelTransformer<MODEL_CLASS,String>)value).transform(model);
+		} else if(value instanceof ModelTransformer<?,?,?>) {
+			String stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)value).transform(model,config);
 			builder.append(stringValue);
 		} else if(value instanceof String) {
 			builder.append(value);

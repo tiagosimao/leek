@@ -16,8 +16,26 @@
  */
 package com.irenical.leek.model;
 
-public interface ModelTransformer<FROM_MODEL,TO_MODEL> {
+import com.irenical.leek.view.ViewConfigInterface;
+
+public interface ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigInterface> {
 	
-	public TO_MODEL transform(FROM_MODEL model);
+	public static abstract class Stub<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigInterface> implements ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG>{
+		
+		@Override
+		public Iterable<TO_MODEL> toMany(FROM_MODEL model) {
+			return null;
+		}
+		
+		@Override
+		public TO_MODEL transform(FROM_MODEL model, CONFIG config) {
+			return null;
+		}
+		
+	}
+	
+	public TO_MODEL transform(FROM_MODEL model,CONFIG config);
+	
+	public Iterable<TO_MODEL> toMany(FROM_MODEL model);
 
 }

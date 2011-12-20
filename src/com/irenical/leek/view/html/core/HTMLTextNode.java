@@ -36,7 +36,7 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> 
 		return addText(text);
 	}
 	
-	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addMutableText(ModelTransformer<MODEL_CLASS,String> transformer){
+	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addMutableText(ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS> transformer){
 		return addText(transformer);
 	}
 	
@@ -51,8 +51,8 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> 
 		if(config==null||config.isShowing()){
 			for(Object text : allText){
 				String stringValue = null;
-				if(text instanceof ModelTransformer<?,?>){
-					stringValue = ((ModelTransformer<MODEL_CLASS,String>)text).transform(model);
+				if(text instanceof ModelTransformer<?,?,?>){
+					stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)text).transform(model,config);
 				} else if(text instanceof String){
 					stringValue = (String)text;
 				}
