@@ -21,11 +21,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.irenical.leek.model.ModelTransformer;
-import com.irenical.leek.view.ViewConfig;
+import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
 
-public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
+public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
 	
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
 	

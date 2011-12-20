@@ -16,7 +16,7 @@
  */
 package com.irenical.leek.view.html.core;
 
-import com.irenical.leek.view.ViewConfig;
+import com.irenical.leek.view.ViewConfigInterface;
 
 
 
@@ -120,7 +120,7 @@ public class HTMLTag implements HTMLConstants{
 		this.name=name;
 	}
 	
-	protected <MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> void htmlOpen(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> attributes,boolean selfClosing,boolean isCommented) {
+	protected <MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<MODEL_CLASS>> void htmlOpen(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> attributes,boolean selfClosing,boolean isCommented) {
 		if(isCommented){
 			builder.append(OPENING_COMMENT);
 		}
