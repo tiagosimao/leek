@@ -95,7 +95,9 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 			}
 		} else if(value instanceof ModelTransformer<?,?,?>) {
 			String stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)value).transform(model,config);
-			builder.append(stringValue);
+			if(stringValue!=null){
+				builder.append(stringValue);
+			}
 		} else if(value instanceof String) {
 			builder.append(value);
 		}
