@@ -29,7 +29,7 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> 
 	
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
 	
-	protected HTMLTextNode() {
+	public HTMLTextNode() {
 	}
 	
 	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addStaticText(String text){
