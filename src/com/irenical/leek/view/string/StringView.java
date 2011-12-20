@@ -20,20 +20,13 @@ import com.irenical.leek.view.ViewConfig;
 
 public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>>{
 	
-	private final CONFIG_CLASS config;
-	
-	protected StringView(CONFIG_CLASS config){
-		this.config = config;
+	protected StringView(){
 	}
 	
-	public CONFIG_CLASS getConfig() {
-		return config;
+	public final void draw(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config){
+		buildString(builder,model,config);
 	}
 	
-	public final void draw(StringBuilder builder,MODEL_CLASS model){
-		buildString(builder,model);
-	}
-	
-	protected abstract void buildString(StringBuilder builder,MODEL_CLASS model);
+	protected abstract void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config);
 
 }

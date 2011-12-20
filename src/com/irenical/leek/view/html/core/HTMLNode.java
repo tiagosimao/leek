@@ -33,14 +33,13 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> 
 	
 	private final List<StringView<?,?>> children = Collections.synchronizedList(new LinkedList<StringView<?,?>>());
 	
-	private final HTMLAttributes<MODEL_CLASS> attributes = new HTMLAttributes<MODEL_CLASS>();
+	private final HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> attributes = new HTMLAttributes<MODEL_CLASS,CONFIG_CLASS>();
 	
 	private final HTMLTag tag;
 	
 	private boolean commented = false;
 	
-	public HTMLNode(HTMLTag tag, CONFIG_CLASS config) {
-		super(config);
+	public HTMLNode(HTMLTag tag) {
 		this.tag=tag;
 	}
 	
@@ -48,7 +47,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> 
 		this.commented = commented;
 	}
 	
-	public HTMLAttributes<MODEL_CLASS> getAttributes() {
+	public HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> getAttributes() {
 		return attributes;
 	}
 	
@@ -94,9 +93,9 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> 
 	private <CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS extends ViewConfig<CHILD_MODEL_CLASS>> StringView<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> createNode(HTMLTag tag,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS> transformer,CHILD_CONFIG_CLASS config){
 		StringView<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS> child = null;
 		if(tag==null){
-			child = new HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>(config);
+			child = new HTMLTextNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>();
 		} else {
-			child = new HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>(tag,(config));
+			child = new HTMLNode<CHILD_MODEL_CLASS,CHILD_CONFIG_CLASS>(tag);
 		}
 		transformers.put(child, transformer);
 		children.add(child);
@@ -105,10 +104,10 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> 
 	
 	@SuppressWarnings({"unchecked","rawtypes"})
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model) {
-		if(getConfig()==null||getConfig().isShowing(model)){
+	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
+		if(config==null||config.isShowing(model)){
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
-			tag.htmlOpen(builder, model, attributes, selfClosing, commented);
+			tag.htmlOpen(builder, model, config, attributes, selfClosing, commented);
 			for(StringView child : children){
 				ModelTransformer<MODEL_CLASS, ?> transformer = transformers.get(child);
 				if(transformer instanceof ModelToManyTransformer<?, ?>){
@@ -116,13 +115,13 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> 
 					if(models!=null){
 						for(Object subModel : models){
 							builder.append(SYMBOL_NEWLINE);
-							child.draw(builder, subModel);
+							child.draw(builder, subModel,config);
 						}
 					}
 				} else {
 					Object targetModel = transformer == null ? model : transformer.transform(model);
 					builder.append(SYMBOL_NEWLINE);
-					child.draw(builder,targetModel);
+					child.draw(builder,targetModel,config);
 				}
 			}
 			if(!selfClosing){

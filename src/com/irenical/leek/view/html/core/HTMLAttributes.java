@@ -28,12 +28,11 @@ import com.irenical.leek.model.ModelTransformer;
 import com.irenical.leek.view.ViewConfig;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLAttributes<MODEL_CLASS> extends StringView<MODEL_CLASS,ViewConfig<MODEL_CLASS>> implements HTMLConstants {
+public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
 	
 	private final Map<String,Object> allAttributes = Collections.synchronizedMap(new HashMap<String,Object>());
 	
 	protected HTMLAttributes() {
-		super(null);
 	}
 	
 	public void setStaticAttribute(String key,String value){
@@ -73,7 +72,7 @@ public class HTMLAttributes<MODEL_CLASS> extends StringView<MODEL_CLASS,ViewConf
 	}
 	
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model) {
+	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
 		for(String key:allAttributes.keySet()){
 			Object values=allAttributes.get(key);
 			if(values!=null){

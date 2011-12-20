@@ -29,8 +29,7 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLAS
 	
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
 	
-	protected HTMLTextNode(CONFIG_CLASS config) {
-		super(config);
+	protected HTMLTextNode() {
 	}
 	
 	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addStaticText(String text){
@@ -48,8 +47,8 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfig<MODEL_CLAS
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model) {
-		if(getConfig()==null||getConfig().isShowing(model)){
+	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
+		if(config==null||config.isShowing(model)){
 			for(Object text : allText){
 				String stringValue = null;
 				if(text instanceof ModelTransformer<?,?>){
