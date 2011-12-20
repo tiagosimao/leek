@@ -25,7 +25,7 @@ import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
 
-public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
+public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
 	
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
 	
@@ -48,7 +48,7 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<M
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
-		if(config==null||config.isShowing(model)){
+		if(config==null||config.isShowing()){
 			for(Object text : allText){
 				String stringValue = null;
 				if(text instanceof ModelTransformer<?,?>){

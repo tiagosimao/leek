@@ -28,7 +28,7 @@ import com.irenical.leek.model.ModelTransformer;
 import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<MODEL_CLASS>> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
+public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
 	
 	private final Map<String,Object> allAttributes = Collections.synchronizedMap(new HashMap<String,Object>());
 	

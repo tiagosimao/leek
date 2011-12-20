@@ -18,7 +18,7 @@ package com.irenical.leek.view.string;
 
 import com.irenical.leek.view.ViewConfigInterface;
 
-public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface<MODEL_CLASS>>{
+public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface>{
 	
 	protected StringView(){
 	}
