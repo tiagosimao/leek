@@ -30,6 +30,10 @@ public interface HTMLConstants {
 	public static final String WIDTH_KEY = "width";
 	
 	public static final String HEIGHT_KEY = "height";
+	
+	public static final String TITLE_KEY = "title";
+	
+	public static final String ALT_KEY = "alt";
 
 	public static final char SYMBOL_EQUALS = '=';
 	

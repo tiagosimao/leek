@@ -74,7 +74,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 		return addTextNode(new HTMLTextNode<CHILD_MODEL_CLASS, CONFIG_CLASS>(), transformer);
 	}
 	
-	public <CHILD_MODEL_CLASS> HTMLTextNode<CHILD_MODEL_CLASS,CONFIG_CLASS> addTextNode(HTMLTextNode<CHILD_MODEL_CLASS,CONFIG_CLASS> node,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS,CONFIG_CLASS> transformer){
+	public <CHILD_MODEL_CLASS,RETURN_TYPE extends HTMLTextNode<CHILD_MODEL_CLASS,CONFIG_CLASS>> HTMLTextNode<CHILD_MODEL_CLASS,CONFIG_CLASS> addTextNode(RETURN_TYPE node,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS,CONFIG_CLASS> transformer){
 		transformers.put(node, transformer);
 		children.add(node);
 		return node;
@@ -92,7 +92,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 		return addNode(new HTMLNode<CHILD_MODEL_CLASS, CONFIG_CLASS>(tag), transformer);
 	}
 	
-	public <CHILD_MODEL_CLASS> HTMLNode<CHILD_MODEL_CLASS,CONFIG_CLASS> addNode(HTMLNode<CHILD_MODEL_CLASS,CONFIG_CLASS> node,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS,CONFIG_CLASS> transformer){
+	public <CHILD_MODEL_CLASS,RETURN_TYPE extends HTMLNode<CHILD_MODEL_CLASS,CONFIG_CLASS>> RETURN_TYPE addNode(RETURN_TYPE node,ModelTransformer<MODEL_CLASS,CHILD_MODEL_CLASS,CONFIG_CLASS> transformer){
 		transformers.put(node, transformer);
 		children.add(node);
 		return node;
