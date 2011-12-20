@@ -23,6 +23,10 @@ public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInte
 	protected StringView(){
 	}
 	
+	public boolean isVisible(MODEL_CLASS model, CONFIG_CLASS config, int groupIndex){
+		return true;
+	}
+	
 	public final void draw(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex){
 		buildString(builder,model,config,groupIndex);
 	}

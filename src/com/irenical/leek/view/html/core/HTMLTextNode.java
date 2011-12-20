@@ -48,7 +48,7 @@ public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex) {
-		if(config==null||config.isShowing()){
+		if(isVisible(model,config,groupIndex)){
 			for(Object text : allText){
 				String stringValue = null;
 				if(text instanceof ModelTransformer<?,?,?>){

@@ -101,7 +101,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex) {
-		if(config==null||config.isShowing()){
+		if(isVisible(model,config,groupIndex)){
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
 			tag.htmlOpen(builder, model, config, groupIndex,attributes, selfClosing, commented);
 			for(StringView child : children){

@@ -18,6 +18,4 @@ package com.irenical.leek.view;
 
 public interface ViewConfigInterface {
 
-	public abstract boolean isShowing();
-	
 }
