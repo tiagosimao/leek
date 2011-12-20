@@ -23,7 +23,7 @@ public interface HTMLConstants {
 	
 	public static final String SRC_KEY = "src";
 	
-	public static final String HREF_KEY = "src";
+	public static final String HREF_KEY = "href";
 	
 	public static final String ONCLICK_KEY = "onclick";
 	
