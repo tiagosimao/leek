@@ -100,22 +100,23 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
+	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex) {
 		if(config==null||config.isShowing()){
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
-			tag.htmlOpen(builder, model, config, attributes, selfClosing, commented);
+			tag.htmlOpen(builder, model, config, groupIndex,attributes, selfClosing, commented);
 			for(StringView child : children){
 				ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS> transformer = transformers.get(child);
 				Iterable<?> models = transformer == null ? null : ((ModelTransformer<MODEL_CLASS,?,CONFIG_CLASS>)transformer).toMany(model);
 				if(models!=null){
+					int gi = 0;
 					for(Object subModel : models){
 						builder.append(SYMBOL_NEWLINE);
-						child.draw(builder,subModel,config);
+						child.draw(builder,subModel,config,gi++);
 					}
 				} else {
-					Object targetModel = transformer == null ? model : transformer.transform(model,config);
+					Object targetModel = transformer == null ? model : transformer.transform(model,config,groupIndex);
 					builder.append(SYMBOL_NEWLINE);
-					child.draw(builder,targetModel,config);
+					child.draw(builder,targetModel,config,groupIndex);
 				}
 			}
 			if(!selfClosing){

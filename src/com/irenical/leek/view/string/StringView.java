@@ -23,10 +23,10 @@ public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInte
 	protected StringView(){
 	}
 	
-	public final void draw(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config){
-		buildString(builder,model,config);
+	public final void draw(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex){
+		buildString(builder,model,config,groupIndex);
 	}
 	
-	protected abstract void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config);
+	protected abstract void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex);
 
 }

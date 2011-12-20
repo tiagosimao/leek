@@ -72,7 +72,7 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 	}
 	
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config) {
+	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex) {
 		for(String key:allAttributes.keySet()){
 			Object values=allAttributes.get(key);
 			if(values!=null){
@@ -80,21 +80,21 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 				builder.append(key);
 				builder.append(SYMBOL_EQUALS);
 				builder.append(SYMBOL_QUOTES);
-				buildValueString(builder,values,model,config);
+				buildValueString(builder,values,model,config,groupIndex);
 				builder.append(SYMBOL_QUOTES);
 			}
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void buildValueString(StringBuilder builder,Object value,MODEL_CLASS model,CONFIG_CLASS config){
+	private void buildValueString(StringBuilder builder,Object value,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex){
 		if(value instanceof Collection<?>){
 			for(Object v : ((Collection<?>)value)){
-				buildValueString(builder,v,model,config);
+				buildValueString(builder,v,model,config,groupIndex);
 				builder.append(SYMBOL_WHITESPACE);
 			}
 		} else if(value instanceof ModelTransformer<?,?,?>) {
-			String stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)value).transform(model,config);
+			String stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)value).transform(model,config,groupIndex);
 			if(stringValue!=null){
 				builder.append(stringValue);
 			}
