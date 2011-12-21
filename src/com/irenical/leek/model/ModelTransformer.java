@@ -36,6 +36,6 @@ public interface ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigI
 	
 	public TO_MODEL transform(FROM_MODEL model,CONFIG config,int groupIndex);
 	
-	public Iterable<TO_MODEL> toMany(FROM_MODEL model);
+	public Iterable<? extends TO_MODEL> toMany(FROM_MODEL model);
 	
 }
