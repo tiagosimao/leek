@@ -106,7 +106,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 			tag.htmlOpen(builder, model, config, groupIndex,attributes, selfClosing, commented);
 			for(StringView child : children){
 				ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS> transformer = transformers.get(child);
-				Iterable<?> models = transformer == null ? null : ((ModelTransformer<MODEL_CLASS,?,CONFIG_CLASS>)transformer).toMany(model);
+				Iterable<?> models = transformer == null ? null : ((ModelTransformer<MODEL_CLASS,?,CONFIG_CLASS>)transformer).toMany(model,config);
 				if(models!=null){
 					int gi = 0;
 					for(Object subModel : models){

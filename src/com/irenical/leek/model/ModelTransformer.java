@@ -23,7 +23,7 @@ public interface ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigI
 	public static abstract class Stub<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigInterface> implements ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG>{
 		
 		@Override
-		public Iterable<TO_MODEL> toMany(FROM_MODEL model) {
+		public Iterable<TO_MODEL> toMany(FROM_MODEL model,CONFIG config) {
 			return null;
 		}
 		
@@ -36,6 +36,6 @@ public interface ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigI
 	
 	public TO_MODEL transform(FROM_MODEL model,CONFIG config,int groupIndex);
 	
-	public Iterable<? extends TO_MODEL> toMany(FROM_MODEL model);
+	public Iterable<TO_MODEL> toMany(FROM_MODEL model,CONFIG config);
 	
 }
