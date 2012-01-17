@@ -63,4 +63,8 @@ public interface HTMLConstants {
 	
 	public static final String CLOSING_CLOSE=new String(new char[]{SYMBOL_GREATER_THAN});
 	
+	public static final String CDATA_START = "//<![CDATA[\n";
+	
+	public static final String CDATA_END = "//]]>";
+	
 }

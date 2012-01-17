@@ -107,7 +107,7 @@ public class HTMLNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> exte
 			for(StringView child : children){
 				ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS> transformer = transformers.get(child);
 				Iterable<?> models = transformer == null ? null : ((ModelTransformer<MODEL_CLASS,?,CONFIG_CLASS>)transformer).toMany(model,config);
-				if(models!=null){
+				if(models!=null) {
 					int gi = 0;
 					for(Object subModel : models){
 						builder.append(SYMBOL_NEWLINE);
