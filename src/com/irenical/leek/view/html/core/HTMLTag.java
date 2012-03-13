@@ -20,8 +20,8 @@ import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.html.core.HTMLAttributes;
 import com.irenical.leek.view.html.core.HTMLConstants;
 
-public class HTMLTag implements HTMLConstants{
-	
+public class HTMLTag implements HTMLConstants {
+
 	public static final HTMLTag A = new HTMLTag("a");
 	public static final HTMLTag ABBR = new HTMLTag("abbr");
 	public static final HTMLTag ACRONYM = new HTMLTag("acronym");
@@ -42,7 +42,7 @@ public class HTMLTag implements HTMLConstants{
 	public static final HTMLTag DD = new HTMLTag("dd");
 	public static final HTMLTag DEL = new HTMLTag("del");
 	public static final HTMLTag DFN = new HTMLTag("dfn");
-	public static final HTMLTag DIV = new HTMLTag("div",false,false,false);
+	public static final HTMLTag DIV = new HTMLTag("div", false, false, false);
 	public static final HTMLTag DL = new HTMLTag("dl");
 	public static final HTMLTag DT = new HTMLTag("dt");
 	public static final HTMLTag EM = new HTMLTag("em");
@@ -83,10 +83,10 @@ public class HTMLTag implements HTMLConstants{
 	public static final HTMLTag Q = new HTMLTag("q");
 	public static final HTMLTag S = new HTMLTag("s");
 	public static final HTMLTag SAMP = new HTMLTag("samp");
-	public static final HTMLTag SCRIPT = new HTMLTag("script",false,false,true);
+	public static final HTMLTag SCRIPT = new HTMLTag("script", false, false, true);
 	public static final HTMLTag SELECT = new HTMLTag("select");
 	public static final HTMLTag SMALL = new HTMLTag("small");
-	public static final HTMLTag SPAN = new HTMLTag("span",false,true,false);
+	public static final HTMLTag SPAN = new HTMLTag("span", false, true, false);
 	public static final HTMLTag STRONG = new HTMLTag("strong");
 	public static final HTMLTag STYLE = new HTMLTag("style");
 	public static final HTMLTag SUB = new HTMLTag("sub");
@@ -103,54 +103,54 @@ public class HTMLTag implements HTMLConstants{
 	public static final HTMLTag TT = new HTMLTag("tt");
 	public static final HTMLTag UL = new HTMLTag("ul");
 	public static final HTMLTag VAR = new HTMLTag("var");
-	
+
 	public final boolean inline;
-	
+
 	public final boolean canSelfClose;
-	
+
 	private final String name;
-	
+
 	private final boolean cData;
-	
-	private HTMLTag(String name){
-		this(name,true,false,false);
+
+	private HTMLTag(String name) {
+		this(name, true, false, false);
 	}
-	
-	private HTMLTag(String name, boolean canSelfClose, boolean inline, boolean cData){
-		this.canSelfClose=canSelfClose;
-		this.inline=inline;
-		this.name=name;
-		this.cData=cData;
+
+	private HTMLTag(String name, boolean canSelfClose, boolean inline, boolean cData) {
+		this.canSelfClose = canSelfClose;
+		this.inline = inline;
+		this.name = name;
+		this.cData = cData;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
-	protected <MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> void htmlOpen(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex,HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> attributes,boolean selfClosing,boolean isCommented) {
-		if(isCommented){
+
+	protected <MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> void htmlOpen(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex, HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes, boolean selfClosing, boolean isCommented) {
+		if (isCommented) {
 			builder.append(OPENING_COMMENT);
 		}
-		builder.append(SYMBOL_LESS_THAN+name);
-		if(attributes!=null){
-			attributes.draw(builder,model,config,groupIndex);
+		builder.append(SYMBOL_LESS_THAN + name);
+		if (attributes != null) {
+			attributes.draw(builder, model, config, groupIndex);
 		}
-		builder.append(selfClosing?(isCommented?CLOSING_COMMENT:SELF_CLOSING):CLOSING_CLOSE);
-		if(cData){
+		builder.append(selfClosing ? (isCommented ? CLOSING_COMMENT : SELF_CLOSING) : CLOSING_CLOSE);
+		if (cData) {
 			builder.append(CDATA_START);
 		}
 	}
-	
-	protected void htmlClose(StringBuilder builder,boolean isCommented) {
-		if(cData){
+
+	protected void htmlClose(StringBuilder builder, boolean isCommented) {
+		if (cData) {
 			builder.append(CDATA_END);
 		}
 		builder.append(OPENING_CLOSE);
 		builder.append(name);
 		builder.append(CLOSING_CLOSE);
-		if(isCommented){
+		if (isCommented) {
 			builder.append(CLOSING_COMMENT);
 		}
 	}
-	
+
 }

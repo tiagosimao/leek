@@ -128,17 +128,18 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> ext
 			}
 			for (StringView child : children) {
 				ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS> transformer = transformers.get(child);
+				CONFIG_CLASS targetConfig = transformer == null ? config : transformer.transformConfig(config);
 				Iterable<?> models = transformer == null ? null : ((ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS>) transformer).toMany(model, config);
 				if (models != null) {
 					int gi = 0;
 					for (Object subModel : models) {
 						builder.append(SYMBOL_NEWLINE);
-						child.draw(builder, subModel, config, gi++);
+						child.draw(builder, subModel, targetConfig, gi++);
 					}
 				} else {
 					Object targetModel = transformer == null ? model : transformer.transform(model, config, groupIndex);
 					builder.append(SYMBOL_NEWLINE);
-					child.draw(builder, targetModel, config, groupIndex);
+					child.draw(builder, targetModel, targetConfig, groupIndex);
 				}
 			}
 			if (!selfClosing) {
@@ -149,12 +150,12 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> ext
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
-		String result = "+["+tag.getName()+"("+getClass().getSimpleName()+"): ";
-		for(StringView<?, ?> c : children){
-			result+=c.toString();
+		String result = "+[" + tag.getName() + "(" + getClass().getSimpleName() + "): ";
+		for (StringView<?, ?> c : children) {
+			result += c.toString();
 		}
 		return result + "]";
 	}

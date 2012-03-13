@@ -24,39 +24,38 @@ import com.irenical.leek.model.ModelTransformer;
 import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
+public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
 
-public class HTMLTextNode<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS,CONFIG_CLASS> implements HTMLConstants {
-	
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
-	
+
 	public HTMLTextNode() {
 	}
-	
-	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addStaticText(String text){
+
+	public HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> addStaticText(String text) {
 		return addText(text);
 	}
-	
-	public HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addMutableText(ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS> transformer){
+
+	public HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> addMutableText(ModelTransformer<MODEL_CLASS, String, CONFIG_CLASS> transformer) {
 		return addText(transformer);
 	}
-	
-	private HTMLTextNode<MODEL_CLASS,CONFIG_CLASS> addText(Object value){
+
+	private HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> addText(Object value) {
 		allText.add(value);
 		return this;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void buildString(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex) {
-		if(isVisible(model,config,groupIndex)){
-			for(Object text : allText){
+	protected void buildString(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+		if (isVisible(model, config, groupIndex)) {
+			for (Object text : allText) {
 				String stringValue = null;
-				if(text instanceof ModelTransformer<?,?,?>){
-					stringValue = ((ModelTransformer<MODEL_CLASS,String,CONFIG_CLASS>)text).transform(model,config,groupIndex);
-				} else if(text instanceof String){
-					stringValue = (String)text;
+				if (text instanceof ModelTransformer<?, ?, ?>) {
+					stringValue = ((ModelTransformer<MODEL_CLASS, String, CONFIG_CLASS>) text).transform(model, config, groupIndex);
+				} else if (text instanceof String) {
+					stringValue = (String) text;
 				}
-				if(stringValue!=null){
+				if (stringValue != null) {
 					builder.append(stringValue);
 				}
 			}

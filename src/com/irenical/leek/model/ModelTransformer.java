@@ -32,10 +32,17 @@ public interface ModelTransformer<FROM_MODEL,TO_MODEL,CONFIG extends ViewConfigI
 			return null;
 		}
 		
+		@Override
+		public CONFIG transformConfig(CONFIG config) {
+			return config;
+		}
+		
 	}
 	
 	public TO_MODEL transform(FROM_MODEL model,CONFIG config,int groupIndex);
 	
 	public Iterable<TO_MODEL> toMany(FROM_MODEL model,CONFIG config);
+	
+	public CONFIG transformConfig(CONFIG config);
 	
 }
