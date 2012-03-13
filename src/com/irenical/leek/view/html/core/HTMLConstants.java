@@ -41,6 +41,8 @@ public interface HTMLConstants {
 	
 	public static final char SYMBOL_QUOTES = '"';
 	
+	public static final char SYMBOL_APOSTROPHE = '\'';
+	
 	public static final char SYMBOL_LESS_THAN = '<';
 
 	public static final char SYMBOL_GREATER_THAN = '>';

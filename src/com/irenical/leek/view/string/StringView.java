@@ -20,6 +20,8 @@ import com.irenical.leek.view.ViewConfigInterface;
 
 public abstract class StringView<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface>{
 	
+	public StringView<?,?> parent;
+	
 	protected StringView(){
 	}
 	

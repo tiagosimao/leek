@@ -79,9 +79,9 @@ public class HTMLAttributes<MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface
 				builder.append(SYMBOL_WHITESPACE);
 				builder.append(key);
 				builder.append(SYMBOL_EQUALS);
-				builder.append(SYMBOL_QUOTES);
+				builder.append(SYMBOL_APOSTROPHE);
 				buildValueString(builder,values,model,config,groupIndex);
-				builder.append(SYMBOL_QUOTES);
+				builder.append(SYMBOL_APOSTROPHE);
 			}
 		}
 	}

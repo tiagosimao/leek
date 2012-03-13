@@ -123,6 +123,10 @@ public class HTMLTag implements HTMLConstants{
 		this.cData=cData;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	protected <MODEL_CLASS,CONFIG_CLASS extends ViewConfigInterface> void htmlOpen(StringBuilder builder,MODEL_CLASS model,CONFIG_CLASS config,int groupIndex,HTMLAttributes<MODEL_CLASS,CONFIG_CLASS> attributes,boolean selfClosing,boolean isCommented) {
 		if(isCommented){
 			builder.append(OPENING_COMMENT);
