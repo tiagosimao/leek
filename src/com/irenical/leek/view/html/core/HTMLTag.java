@@ -16,9 +16,7 @@
  */
 package com.irenical.leek.view.html.core;
 
-import com.irenical.leek.view.ViewConfigInterface;
-import com.irenical.leek.view.html.core.HTMLAttributes;
-import com.irenical.leek.view.html.core.HTMLConstants;
+import java.io.IOException;
 
 public class HTMLTag implements HTMLConstants {
 
@@ -73,7 +71,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag META = new HTMLTag("meta");
 	public static final HTMLTag NOFRAMES = new HTMLTag("noframes");
 	public static final HTMLTag NOSCRIPT = new HTMLTag("noscript");
-	public static final HTMLTag OBJECT = new HTMLTag("object");
+	public static final HTMLTag OBJECT = new HTMLTag("object",false,false,false);
 	public static final HTMLTag OL = new HTMLTag("ol");
 	public static final HTMLTag OPTGROUP = new HTMLTag("optgroup");
 	public static final HTMLTag OPTION = new HTMLTag("option");
@@ -112,11 +110,11 @@ public class HTMLTag implements HTMLConstants {
 
 	private final boolean cData;
 
-	private HTMLTag(String name) {
+	public HTMLTag(String name) {
 		this(name, true, false, false);
 	}
 
-	private HTMLTag(String name, boolean canSelfClose, boolean inline, boolean cData) {
+	public HTMLTag(String name, boolean canSelfClose, boolean inline, boolean cData) {
 		this.canSelfClose = canSelfClose;
 		this.inline = inline;
 		this.name = name;
@@ -127,7 +125,7 @@ public class HTMLTag implements HTMLConstants {
 		return name;
 	}
 
-	protected <MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> void htmlOpen(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex, HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes, boolean selfClosing, boolean isCommented) {
+	protected <MODEL_CLASS, CONFIG_CLASS> void htmlOpen(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex, HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes, boolean selfClosing, boolean isCommented) throws IOException {
 		if (isCommented) {
 			builder.append(OPENING_COMMENT);
 		}
@@ -141,7 +139,7 @@ public class HTMLTag implements HTMLConstants {
 		}
 	}
 
-	protected void htmlClose(StringBuilder builder, boolean isCommented) {
+	protected void htmlClose(Appendable builder, boolean isCommented) throws IOException {
 		if (cData) {
 			builder.append(CDATA_END);
 		}

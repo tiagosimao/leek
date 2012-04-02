@@ -16,23 +16,40 @@
  */
 package com.irenical.leek.view.string;
 
-import com.irenical.leek.view.ViewConfigInterface;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-public abstract class StringView<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> {
+import com.irenical.leek.controller.VisibilityControllerInterface;
+
+public abstract class StringView<MODEL_CLASS, CONFIG_CLASS> {
+
+	private final List<VisibilityControllerInterface<MODEL_CLASS, CONFIG_CLASS>> visibilityControllers = Collections.synchronizedList(new LinkedList<VisibilityControllerInterface<MODEL_CLASS, CONFIG_CLASS>>());
 
 	public StringView<?, ?> parent;
 
-	protected StringView() {
+	public void addVisibilityController(VisibilityControllerInterface<MODEL_CLASS, CONFIG_CLASS> controller) {
+		if (controller != null) {
+			visibilityControllers.add(controller);
+		}
 	}
 
 	public boolean isVisible(MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
-		return true;
+		boolean result = true;
+		for (VisibilityControllerInterface<MODEL_CLASS, CONFIG_CLASS> controller : visibilityControllers) {
+			result &= controller.isVisible(model, config);
+			if (!result) {
+				break;
+			}
+		}
+		return result;
 	}
 
-	public final void draw(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+	public final void draw(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
 		buildString(builder, model, config, groupIndex);
 	}
 
-	protected abstract void buildString(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex);
+	protected abstract void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException;
 
 }

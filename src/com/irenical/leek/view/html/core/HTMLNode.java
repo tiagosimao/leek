@@ -16,6 +16,7 @@
  */
 package com.irenical.leek.view.html.core;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,10 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.irenical.leek.model.ModelTransformer;
-import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
+public class HTMLNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
 
 	private final Map<StringView<?, ?>, ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS>> transformers = Collections.synchronizedMap(new HashMap<StringView<?, ?>, ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS>>());
 
@@ -34,14 +34,24 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> ext
 
 	private final HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes = new HTMLAttributes<MODEL_CLASS, CONFIG_CLASS>();
 
-	private final HTMLTag tag;
+	private HTMLTag tag;
+	
+	private HTMLTagControllerInterface<MODEL_CLASS, CONFIG_CLASS> tagController;
 
 	private boolean commented = false;
 
 	private boolean printTag = true;
+	
+	public HTMLNode(HTMLTagControllerInterface<MODEL_CLASS, CONFIG_CLASS> tagController) {
+		this.tagController = tagController;
+	}
 
 	public HTMLNode(HTMLTag tag) {
 		this.tag = tag;
+	}
+	
+	public void setTagController(HTMLTagControllerInterface<MODEL_CLASS, CONFIG_CLASS> tagController) {
+		this.tagController = tagController;
 	}
 
 	public void setCommented(boolean commented) {
@@ -120,10 +130,12 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> ext
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected void buildString(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
 		if (isVisible(model, config, groupIndex)) {
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
-			if (printTag) {
+			HTMLTag tag = printTag ? (tagController == null ? null : tagController.getTag(model, config, groupIndex) ) : null;
+			tag = (printTag && tag == null) ? this.tag : null;
+			if (tag != null ) {
 				tag.htmlOpen(builder, model, config, groupIndex, attributes, selfClosing, commented);
 			}
 			for (StringView child : children) {
@@ -144,7 +156,7 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> ext
 			}
 			if (!selfClosing) {
 				builder.append(SYMBOL_NEWLINE);
-				if (printTag) {
+				if (tag != null) {
 					tag.htmlClose(builder, commented);
 				}
 			}

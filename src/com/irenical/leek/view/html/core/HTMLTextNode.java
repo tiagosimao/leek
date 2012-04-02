@@ -16,15 +16,15 @@
  */
 package com.irenical.leek.view.html.core;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.irenical.leek.model.ModelTransformer;
-import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
+public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
 
 	private final List<Object> allText = Collections.synchronizedList(new LinkedList<Object>());
 
@@ -46,7 +46,7 @@ public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void buildString(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
 		if (isVisible(model, config, groupIndex)) {
 			for (Object text : allText) {
 				String stringValue = null;

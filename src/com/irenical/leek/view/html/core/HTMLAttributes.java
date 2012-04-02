@@ -17,6 +17,7 @@
 
 package com.irenical.leek.view.html.core;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,10 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.irenical.leek.model.ModelTransformer;
-import com.irenical.leek.view.ViewConfigInterface;
 import com.irenical.leek.view.string.StringView;
 
-public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterface> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
+public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
 
 	private final Map<String, Object> allAttributes = Collections.synchronizedMap(new HashMap<String, Object>());
 
@@ -72,7 +72,7 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterfac
 	}
 
 	@Override
-	protected void buildString(StringBuilder builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
 		for (String key : allAttributes.keySet()) {
 			Object values = allAttributes.get(key);
 			if (values != null) {
@@ -87,7 +87,7 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterfac
 	}
 
 	@SuppressWarnings("unchecked")
-	private void buildValueString(StringBuilder builder, Object value, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) {
+	private void buildValueString(Appendable builder, Object value, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
 		if (value instanceof Collection<?>) {
 			for (Object v : ((Collection<?>) value)) {
 				buildValueString(builder, v, model, config, groupIndex);
@@ -99,7 +99,7 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS extends ViewConfigInterfac
 				builder.append(stringValue);
 			}
 		} else if (value instanceof String) {
-			builder.append(value);
+			builder.append((String)value);
 		}
 	}
 
