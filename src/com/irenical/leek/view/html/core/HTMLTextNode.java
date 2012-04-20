@@ -51,7 +51,8 @@ public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CL
 			for (Object text : allText) {
 				String stringValue = null;
 				if (text instanceof ModelTransformer<?, ?, ?>) {
-					stringValue = ((ModelTransformer<MODEL_CLASS, String, CONFIG_CLASS>) text).transform(model, config, groupIndex);
+					Object value = ((ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS>) text).transform(model, config, groupIndex);
+					stringValue = value == null ? null : value.toString();
 				} else if (text instanceof String) {
 					stringValue = (String) text;
 				}

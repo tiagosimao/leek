@@ -82,6 +82,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag S = new HTMLTag("s");
 	public static final HTMLTag SAMP = new HTMLTag("samp");
 	public static final HTMLTag SCRIPT = new HTMLTag("script", false, false, true);
+	public static final HTMLTag SCRIPT_WITH_SRC = new HTMLTag("script", false, false, false);
 	public static final HTMLTag SELECT = new HTMLTag("select");
 	public static final HTMLTag SMALL = new HTMLTag("small");
 	public static final HTMLTag SPAN = new HTMLTag("span", false, true, false);
