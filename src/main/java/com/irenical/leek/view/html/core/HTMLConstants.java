@@ -23,6 +23,8 @@ public interface HTMLConstants {
      * ATTRIBUTES
      */
     
+    public static final String VALUE_KEY = "value";
+    
     public static final String TYPE_KEY = "type";
     
     public static final String CSS_CLASS_KEY = "class";
