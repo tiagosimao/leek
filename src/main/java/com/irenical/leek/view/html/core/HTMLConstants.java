@@ -43,6 +43,10 @@ public interface HTMLConstants {
     
     public static final String ALT_KEY = "alt";
     
+    public static final String ACTION_KEY = "action";
+    
+    public static final String METHOD_KEY = "method";
+    
     /**
      * ATTRIBUTE VALUES
      */
