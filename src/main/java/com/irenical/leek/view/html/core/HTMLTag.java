@@ -58,7 +58,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag HR = new HTMLTag("hr");
 	public static final HTMLTag HTML = new HTMLTag("html");
 	public static final HTMLTag I = new HTMLTag("i");
-	public static final HTMLTag IFRAME = new HTMLTag("iframe");
+	public static final HTMLTag IFRAME = new HTMLTag("iframe", false, false, false);
 	public static final HTMLTag IMG = new HTMLTag("img");
 	public static final HTMLTag INPUT = new HTMLTag("input");
 	public static final HTMLTag INS = new HTMLTag("ins");
