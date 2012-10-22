@@ -46,7 +46,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag EM = new HTMLTag("em");
 	public static final HTMLTag FIELDSET = new HTMLTag("fieldset");
 	public static final HTMLTag FORM = new HTMLTag("form");
-	public static final HTMLTag FRAME = new HTMLTag("frame");
+	public static final HTMLTag FRAME = new HTMLTag("frame", false, false, false);
 	public static final HTMLTag FRAMESET = new HTMLTag("frameset");
 	public static final HTMLTag H1 = new HTMLTag("h1");
 	public static final HTMLTag H2 = new HTMLTag("h2");
