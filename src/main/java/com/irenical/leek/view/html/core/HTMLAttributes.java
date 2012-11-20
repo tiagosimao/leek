@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.irenical.leek.model.ModelTransformer;
+import com.irenical.leek.utils.TextEncoder;
+import com.irenical.leek.utils.TextStripper;
 import com.irenical.leek.view.string.StringView;
 
 public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
@@ -36,10 +38,12 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_
 	}
 
 	public void setStaticAttribute(String key, String value) {
+        key = TextStripper.alphaOnly(key);
 		setAttribute(key, value, false);
 	}
 
 	public void setStaticAttribute(String key, String value, boolean append) {
+        key = TextStripper.alphaOnly(key);
 		setAttribute(key, value, append);
 	}
 
@@ -72,7 +76,8 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_
 	}
 
 	@Override
-	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, boolean inCData, boolean noEscape,
+                               int groupIndex) throws IOException {
 		for (String key : allAttributes.keySet()) {
 			Object values = allAttributes.get(key);
 			if (values != null) {
@@ -80,26 +85,27 @@ public class HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_
 				builder.append(key);
 				builder.append(SYMBOL_EQUALS);
 				builder.append(SYMBOL_APOSTROPHE);
-				buildValueString(builder, values, model, config, groupIndex);
+				buildValueString(builder, values, model, config, inCData, noEscape, groupIndex);
 				builder.append(SYMBOL_APOSTROPHE);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void buildValueString(Appendable builder, Object value, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
+	private void buildValueString(Appendable builder, Object value, MODEL_CLASS model, CONFIG_CLASS config, boolean inCData,
+                                  boolean noEscape, int groupIndex) throws IOException {
 		if (value instanceof Collection<?>) {
 			for (Object v : ((Collection<?>) value)) {
-				buildValueString(builder, v, model, config, groupIndex);
+				buildValueString(builder, v, model, config, inCData, noEscape, groupIndex);
 				builder.append(SYMBOL_WHITESPACE);
 			}
 		} else if (value instanceof ModelTransformer<?, ?, ?>) {
 			String stringValue = ((ModelTransformer<MODEL_CLASS, String, CONFIG_CLASS>) value).transform(model, config, groupIndex);
 			if (stringValue != null) {
-				builder.append(stringValue);
+                builder.append(noEscape ? stringValue : TextEncoder.encodeHTMLAttrSimple(stringValue));
 			}
 		} else if (value instanceof String) {
-			builder.append((String)value);
+			builder.append(noEscape ? (String)value : TextEncoder.encodeHTMLAttrSimple((String)value));
 		}
 	}
 

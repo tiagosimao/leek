@@ -41,6 +41,8 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS,
 	private boolean commented = false;
 
 	private boolean printTag = true;
+
+    private boolean literal = false;
 	
 	public HTMLNode(HTMLTagControllerInterface<MODEL_CLASS, CONFIG_CLASS> tagController) {
 		this.tagController = tagController;
@@ -66,7 +68,15 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS,
 		return printTag;
 	}
 
-	public void setStaticAttribute(String key, String value) {
+    public boolean isLiteral() {
+        return literal;
+    }
+
+    public void setLiteral(boolean literal) {
+        this.literal = literal;
+    }
+
+    public void setStaticAttribute(String key, String value) {
 		attributes.setStaticAttribute(key, value);
 	}
 
@@ -130,14 +140,22 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS,
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, boolean inCdata, boolean noEscape, int groupIndex) throws IOException {
 		if (isVisible(model, config, groupIndex)) {
 			boolean selfClosing = children.isEmpty() && tag.canSelfClose;
 			HTMLTag tag = printTag ? (tagController == null ? null : tagController.getTag(model, config, groupIndex) ) : null;
 			tag = (printTag && tag == null) ? this.tag : null;
+
+            boolean startedCdata = false;
 			if (tag != null ) {
-				tag.htmlOpen(builder, model, config, groupIndex, attributes, selfClosing, commented);
-			}
+                if(!inCdata && tag.cData) {
+                    startedCdata = true;
+                    inCdata = true;
+                }
+                tag.htmlOpen(builder, model, config, groupIndex, attributes, selfClosing, commented, startedCdata);
+            }
+            noEscape = noEscape || this.isLiteral() || inCdata;
+
 			for (StringView child : children) {
 				ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS> transformer = transformers.get(child);
 				CONFIG_CLASS targetConfig = transformer == null ? config : transformer.transformConfig(config);
@@ -146,18 +164,19 @@ public class HTMLNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS,
 					int gi = 0;
 					for (Object subModel : models) {
 						builder.append(SYMBOL_NEWLINE);
-						child.draw(builder, subModel, targetConfig, gi++);
+						child.draw(builder, subModel, targetConfig, inCdata, noEscape, gi++);
 					}
 				} else {
 					Object targetModel = transformer == null ? model : transformer.transform(model, config, groupIndex);
 					builder.append(SYMBOL_NEWLINE);
-					child.draw(builder, targetModel, targetConfig, groupIndex);
+					child.draw(builder, targetModel, targetConfig, inCdata, noEscape, groupIndex);
 				}
 			}
+
 			if (!selfClosing) {
 				builder.append(SYMBOL_NEWLINE);
 				if (tag != null) {
-					tag.htmlClose(builder, commented);
+					tag.htmlClose(builder, commented, startedCdata);
 				}
 			}
 		}
