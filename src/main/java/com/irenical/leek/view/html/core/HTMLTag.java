@@ -93,7 +93,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag TABLE = new HTMLTag("table");
 	public static final HTMLTag TBODY = new HTMLTag("tbody");
 	public static final HTMLTag TD = new HTMLTag("td");
-	public static final HTMLTag TEXTAREA = new HTMLTag("textarea");
+	public static final HTMLTag TEXTAREA = new HTMLTag("textarea", false, false, false);
 	public static final HTMLTag TFOOT = new HTMLTag("tfoot");
 	public static final HTMLTag TH = new HTMLTag("th");
 	public static final HTMLTag THEAD = new HTMLTag("thead");
