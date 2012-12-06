@@ -20,7 +20,7 @@ package com.irenical.leek.utils;
 
 public class TextStripper {
     public static String alphaOnly(String value) {
-        value = value.replaceAll("[^A-Za-z0-9]", "");
+        value = value.replaceAll("[^A-Za-z0-9-]", "");
 
         if(value.isEmpty())
             return "_";
