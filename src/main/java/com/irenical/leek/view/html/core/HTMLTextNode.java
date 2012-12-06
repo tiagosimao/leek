@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.irenical.leek.model.ModelTransformer;
+import com.irenical.leek.utils.TextEncoder;
 import com.irenical.leek.view.string.StringView;
 
 public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CLASS, CONFIG_CLASS> implements HTMLConstants {
@@ -46,19 +47,21 @@ public class HTMLTextNode<MODEL_CLASS, CONFIG_CLASS> extends StringView<MODEL_CL
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
+	protected void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, boolean inCData,
+                               boolean noEscape, int groupIndex) throws IOException {
 		if (isVisible(model, config, groupIndex)) {
 			for (Object text : allText) {
 				String stringValue = null;
 				if (text instanceof ModelTransformer<?, ?, ?>) {
 					Object value = ((ModelTransformer<MODEL_CLASS, ?, CONFIG_CLASS>) text).transform(model, config, groupIndex);
-					stringValue = value == null ? null : value.toString();
+					stringValue = (value == null) ? null : value.toString();
 				} else if (text instanceof String) {
 					stringValue = (String) text;
 				}
 				if (stringValue != null) {
-					builder.append(stringValue);
-				}
+                    builder.append(noEscape ? stringValue : TextEncoder.encodeHTML(stringValue));
+                    if(inCData) TextEncoder.encodeCData(stringValue);
+                }
 			}
 		}
 	}

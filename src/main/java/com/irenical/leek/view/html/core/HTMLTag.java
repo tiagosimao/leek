@@ -93,7 +93,7 @@ public class HTMLTag implements HTMLConstants {
 	public static final HTMLTag TABLE = new HTMLTag("table");
 	public static final HTMLTag TBODY = new HTMLTag("tbody");
 	public static final HTMLTag TD = new HTMLTag("td");
-	public static final HTMLTag TEXTAREA = new HTMLTag("textarea");
+	public static final HTMLTag TEXTAREA = new HTMLTag("textarea", false, false, false);
 	public static final HTMLTag TFOOT = new HTMLTag("tfoot");
 	public static final HTMLTag TH = new HTMLTag("th");
 	public static final HTMLTag THEAD = new HTMLTag("thead");
@@ -109,7 +109,7 @@ public class HTMLTag implements HTMLConstants {
 
 	private final String name;
 
-	private final boolean cData;
+	public final boolean cData;
 
 	public HTMLTag(String name) {
 		this(name, true, false, false);
@@ -126,7 +126,7 @@ public class HTMLTag implements HTMLConstants {
 		return name;
 	}
 
-	protected <MODEL_CLASS, CONFIG_CLASS> void htmlOpen(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex, HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes, boolean selfClosing, boolean isCommented) throws IOException {
+	protected <MODEL_CLASS, CONFIG_CLASS> void htmlOpen(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex, HTMLAttributes<MODEL_CLASS, CONFIG_CLASS> attributes, boolean selfClosing, boolean isCommented, boolean startedCData) throws IOException {
 		if (isCommented) {
 			builder.append(OPENING_COMMENT);
 		}
@@ -135,13 +135,13 @@ public class HTMLTag implements HTMLConstants {
 			attributes.draw(builder, model, config, groupIndex);
 		}
 		builder.append(selfClosing ? (isCommented ? CLOSING_COMMENT : SELF_CLOSING) : CLOSING_CLOSE);
-		if (cData) {
+		if (cData && startedCData) {
 			builder.append(CDATA_START);
 		}
 	}
 
-	protected void htmlClose(Appendable builder, boolean isCommented) throws IOException {
-		if (cData) {
+	protected void htmlClose(Appendable builder, boolean isCommented, boolean startedCData) throws IOException {
+		if (cData && startedCData) {
 			builder.append(CDATA_END);
 		}
 		builder.append(OPENING_CLOSE);

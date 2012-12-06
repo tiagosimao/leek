@@ -46,10 +46,16 @@ public abstract class StringView<MODEL_CLASS, CONFIG_CLASS> {
 		return result;
 	}
 
-	public final void draw(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
-		buildString(builder, model, config, groupIndex);
-	}
+    public final void draw(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException {
+        buildString(builder, model, config, false, false, groupIndex);
+    }
 
-	protected abstract void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, int groupIndex) throws IOException;
+    public final void draw(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, boolean inCData, boolean noEscape,
+                           int groupIndex) throws IOException {
+        buildString(builder, model, config, inCData, noEscape, groupIndex);
+    }
+
+	protected abstract void buildString(Appendable builder, MODEL_CLASS model, CONFIG_CLASS config, boolean inCData,
+                                        boolean noEscape, int groupIndex) throws IOException;
 
 }
